@@ -1,9 +1,14 @@
 import { getMeal } from '@/lib/meals'
 import classes from './page.module.css'
 import Image from 'next/image'
+import { notFound } from 'next/navigation'
 
 export default function mealsDetails({ params }) {
   const meal = getMeal(params.mealSlug)
+  if (!meal) {
+    notFound()
+  }
+  meal.instructions = meal.instructions.replace(/\n/g, '<br />')
   return (
     <>
       <header className={classes.header}>
@@ -21,7 +26,7 @@ export default function mealsDetails({ params }) {
       <main>
         <p
           className={classes.instructions}
-          dangerouslySetInnerHTML={{ __html: '...' }}
+          dangerouslySetInnerHTML={{ __html: meal.instructions }}
         ></p>
       </main>
     </>
